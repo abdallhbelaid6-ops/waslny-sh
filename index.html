@@ -602,7 +602,7 @@
         document.getElementById('clientLogoutBtn1').addEventListener('click', logoutClient);
         document.getElementById('clientLogoutBtn2').addEventListener('click', logoutClient);
 
-        // عند إرسال طلب رحلة جديد: تم إلغاء فتح وتساب الإدارة هنا تماماً بناءً على طلبك
+        // عند إرسال طلب رحلة جديد: تم إلغاء وتساب الإدارة نهائياً
         document.getElementById('sendOrderBtn').addEventListener('click', function() {
             if(!currentClientPhone) return;
             const service = document.getElementById('serviceType').value;
@@ -726,7 +726,7 @@
             tableDiv.innerHTML = html;
         });
 
-        // عند تسجيل كابتن جديد: يتم إرسال إشعار وتساب للإدارة حصرياً
+        // عند تسجيل كابتن جديد: إرسال إشعار وتساب للإدارة حصرياً
         document.getElementById('driverRegBtn').addEventListener('click', function() {
             const name = document.getElementById('driverRegName').value.trim();
             const title = document.getElementById('driverRegTitle').value.trim();
@@ -772,6 +772,7 @@
             toggleAuthMode('driver', 'login');
         });
 
+        // دالة عرض الطلبات المتاحة وسجل الرحلات للسائق مع إظهار خانة وتفاصيل رقم هاتف الزبون
         function loadDriverOrders() {
             const listDiv = document.getElementById('driversOrdersList');
             const historyDiv = document.getElementById('driverTripHistoryList');
@@ -791,17 +792,21 @@
 
                 Object.keys(data).forEach(k => {
                     let ord = data[k];
+                    
+                    // الطلبات المتاحة (تم إضافة خانة وعرض رقم هاتف الزبون للاتصال به)
                     if(ord.status === 'قيد الانتظار') {
                         hasActive = true;
                         let div = document.createElement('div');
                         div.className = 'driver-order-item';
                         div.innerHTML = `<p><b>كود: ${ord.operationCode}</b> | ${ord.serviceType} (${ord.tripType || 'ذهاب فقط'})</p>` +
+                                      `<p><b>الزبون:</b> ${ord.clientName} | <b>الهاتف:</b> <a href="tel:${ord.clientPhone}" style="color:var(--primary); font-weight:bold; text-decoration:none;">${ord.clientPhone} <i class="fa-solid fa-phone"></i></a></p>` +
                                       `<p>من: ${ord.pickupLocation} ➔ إلى: ${ord.dropoffLocation}</p>` +
                                       `<p>الملاحظات: ${ord.notes} | <b>السعر: ${ord.price}</b></p>` +
                                       `<button class="btn btn-success" style="margin-top:8px; padding:6px; font-size:0.85rem;" onclick="acceptOrder('${k}')">قبول الطلب والتوجه للزبون</button>`;
                         listDiv.appendChild(div);
                     }
 
+                    // الطلبات الخاصة بهذا السائق (السجل والرحلات المقبولة مع خانة هاتف الزبون وزر اتصال مباشر)
                     if(ord.driverPhone === currentDriverPhone) {
                         hasHistory = true;
                         let hDiv = document.createElement('div');
@@ -809,8 +814,15 @@
                         let statusColor = ord.status === 'مكتملة' ? 'color: var(--accent); font-weight: bold;' : 'color: var(--secondary); font-weight: bold;';
                         
                         hDiv.innerHTML = `<p><b>كود الرحلة: ${ord.operationCode}</b> | ${ord.serviceType}</p>` +
+                                         `<p><b>الزبون:</b> ${ord.clientName} | <b>الهاتف:</b> <a href="tel:${ord.clientPhone}" style="color:var(--primary); font-weight:bold; text-decoration:none;">${ord.clientPhone} <i class="fa-solid fa-phone"></i></a></p>` +
                                          `<p>من: ${ord.pickupLocation} ➔ إلى: ${ord.dropoffLocation} | <b>${ord.price}</b></p>` +
                                          `<p>حالة الرحلة: <span style="${statusColor}">${ord.status === 'مكتملة' ? 'منجزة ✓' : ord.status}</span></p>`;
+                        
+                        // زر اتصال هاتفى سريع في الرحلات المقبولة
+                        if(ord.status === 'مقبولة') {
+                            hDiv.innerHTML += `<a href="tel:${ord.clientPhone}" class="btn btn-success" style="display:block; text-align:center; margin-top:8px; padding:6px; font-size:0.8rem; text-decoration:none;"><i class="fa-solid fa-phone-volume"></i> اتصال هاتفي بالزبون</a>`;
+                        }
+
                         historyDiv.appendChild(hDiv);
                     }
                 });
