@@ -23,17 +23,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; flex-direction: row; }
         .sidebar { width: 240px; background: linear-gradient(180deg, #004080, #006699); color: white; display: flex; flex-direction: column; position: fixed; height: 100vh; right: 0; top: 0; z-index: 1000; box-shadow: -4px 0 15px rgba(0,0,0,0.15); }
-        .sidebar-header { padding: 20px 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-header h2 { font-size: 1.2rem; color: #ff9900; font-weight: 900; }
+        .sidebar-header { padding: 20px 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; user-select: none; }
+        .sidebar-header h2 { font-size: 1.2rem; color: #ff9900; font-weight: 900; pointer-events: none; }
         .sidebar-menu { list-style: none; padding: 10px 0; flex: 1; overflow-y: auto; }
         .sidebar-menu li { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; border-right: 4px solid transparent; }
         .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.1); border-right-color: #ff9900; color: #ff9900; }
         .sidebar-menu li i { width: 20px; text-align: center; pointer-events: none; }
         
-        /* الزر المخفي للإدارة في الفوتر الجانبي */
-        .sidebar-footer { padding: 12px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; color: #cbd5e1; }
-        .secret-admin-btn { background: transparent; border: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 0.85rem; padding: 5px; transition: 0.3s; }
-        .secret-admin-btn:hover { color: #ff9900; }
+        .sidebar-footer { padding: 12px; display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; color: #cbd5e1; }
 
         .main-content { margin-right: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; width: calc(100% - 240px); }
         header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 12px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 900; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
@@ -80,7 +77,7 @@
             .sidebar-menu { display: flex; flex-direction: row; width: 100%; justify-content: space-around; padding: 0; }
             .sidebar-menu li { flex-direction: column; padding: 6px; font-size: 0.75rem; gap: 3px; border-right: none; border-top: 3px solid transparent; text-align: center; }
             .sidebar-menu li.active { border-top-color: #ff9900; }
-            .sidebar-footer { display: flex; width: auto; border-top: none; }
+            .sidebar-footer { display: none; }
             .main-content { margin-right: 0; width: 100%; margin-bottom: 60px; }
             .services-grid { grid-template-columns: 1fr; }
         }
@@ -89,21 +86,17 @@
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-header">
+        <!-- النقر المزدوج هنا على الشعار لفتح لوحة الإدارة -->
+        <div class="sidebar-header" id="adminSecretTrigger" title="بوابة الإدارة">
             <h2><i class="fa-solid fa-car-side"></i> وصلني</h2>
         </div>
         <ul class="sidebar-menu">
             <li class="active" data-tab="homeTab"><i class="fa-solid fa-house"></i> <span>الرئيسية</span></li>
-            <script>
-                // إخفاء تبويب الإدارة من القائمة الرئيسية تماماً لتكون مخفية بالكامل
-            </script>
             <li data-tab="clientPortalTab"><i class="fa-solid fa-user"></i> <span>الزبون</span></li>
             <li data-tab="driverPortalTab"><i class="fa-solid fa-car"></i> <span>السائق</span></li>
         </ul>
         <div class="sidebar-footer">
             <span>وادي الشاطئ © 2026</span>
-            <!-- زر مخفي دقيق جداً في الفوتر للدخول السريع للإدارة عبر النقر المزدوج أو النقر -->
-            <button class="secret-admin-btn" id="adminSecretTrigger" title="بوابة الإدارة المشفرة" dblclick-action="openAdmin"><i class="fa-solid fa-lock"></i></button>
         </div>
     </div>
 
@@ -289,16 +282,18 @@
                 </div>
             </div>
 
+            <!-- لوحة التحكم الإدارية (مخفية بالكامل عن الزوار ولا تفتح إلا بالنقر المزدوج على شعار وصلني) -->
             <div id="adminTab" class="card">
-                <h2 class="section-title">لوحة التحكم الإدارية والصلاحيات (دخول موحد)</h2>
-                <div id="adminLoginBox" class="form-group">
-                    <label>أدخل رمز دخول الإدارة (كلمة المرور الرئيسية أو الفرعية):</label>
-                    <input type="password" id="adminPinInput" placeholder="الرمز السري">
-                    <button class="btn" style="margin-top:8px;" id="adminLoginBtn">دخول الإدارة</button>
+                <h2 class="section-title">بوابة الإدارة المشفرة</h2>
+                
+                <!-- حقل إدخال رمز الإدارة المخفي عن العامة تماماً -->
+                <div id="adminLoginBox" class="form-group" style="background: #fffbeb; padding: 15px; border-radius: 10px; border: 1px solid #fde68a;">
+                    <label style="color: #92400e;"><i class="fa-solid fa-shield-halved"></i> أدخل مفتاح أو رمز دخول الإدارة:</label>
+                    <input type="password" id="adminPinInput" placeholder="الرمز السري الخاص بالإدارة">
+                    <button class="btn" style="margin-top:8px; background: #92400e;" id="adminLoginBtn">تحقق والدخول</button>
                 </div>
                 
                 <div id="adminContentPanel" style="display:none;">
-                    <!-- قسم تغيير كلمة المرور للإدارة -->
                     <div style="background: #e8f4fd; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #bee3f8;">
                         <h3 style="color: #2b6cb0; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-key"></i> تغيير كلمة المرور الرئيسية للإدارة</h3>
                         <div class="form-group"><input type="password" id="currentAdminPinCheck" placeholder="أدخل كلمة المرور الحالية للتأكيد"></div>
@@ -306,7 +301,6 @@
                         <button class="btn btn-success" id="changeAdminPinBtn">حفظ كلمة المرور الجديدة</button>
                     </div>
 
-                    <!-- قسم إضافة أدمن جديد وتحديد الصلاحيات -->
                     <div style="background: #fffbeb; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #fde68a;">
                         <h3 style="color: #92400e; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-user-shield"></i> إضافة أدمن جديد وتحديد الصلاحيات</h3>
                         <div class="form-group"><input type="text" id="newAdminName" placeholder="اسم المشرف"></div>
@@ -322,26 +316,22 @@
                         <button class="btn btn-success" id="createAdminBtn">إضافة الأدمن الجديد</button>
                     </div>
 
-                    <!-- قائمة المشرفين المسجلين في النظام -->
                     <div style="background: #fdf2f8; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #fbcfe8;">
                         <h3 style="color: #db2777; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-users-gear"></i> قائمة المشرفين (الأدمن) المسجلين</h3>
                         <div id="adminAdminsListTable" style="max-height: 160px; overflow-y: auto;"></div>
                     </div>
 
-                    <!-- قسم إضافة منطقة جديدة -->
                     <div style="background: #f0fdf4; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #bbf7d0;">
                         <h3 style="color: #166534; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-map-location-dot"></i> إضافة منطقة جديدة للقائمة</h3>
                         <div class="form-group"><input type="text" id="newRegionInput" placeholder="اسم المنطقة الجديدة (مثال: الزاوية، الجفرة...)"></div>
                         <button class="btn btn-success" id="addRegionBtn">إضافة المنطقة للنظام</button>
                     </div>
 
-                    <!-- بوكس عرض الشكاوى والملاحظات الواردة للإدارة -->
                     <div style="background: #faf5ff; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e9d5ff;">
                         <h3 style="color: #6b21a8; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-book-open"></i> بوكس الشكاوى والملاحظات الواردة</h3>
                         <div id="adminComplaintsList" style="max-height: 180px; overflow-y: auto;"></div>
                     </div>
 
-                    <!-- السجل التاريخي للأحداث الإدارية -->
                     <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1;">
                         <h3 style="color: #334155; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-clock-rotate-left"></i> السجل التاريخي للعمليات الإدارية</h3>
                         <div id="adminAuditLogsList" style="max-height: 160px; overflow-y: auto; font-size: 0.85rem;"></div>
@@ -411,13 +401,13 @@
             });
         });
 
-        // تفعيل زر الدخول المخفي للإدارة عبر النقر المزدوج أو النقر المباشر عليه
-        const secretBtn = document.getElementById('adminSecretTrigger');
-        secretBtn.addEventListener('click', function() {
+        // تفعيل الدخول للإدارة عبر النقر المزدوج (Double Click) على شعار وصلني في الشريط الجانبي
+        const secretHeader = document.getElementById('adminSecretTrigger');
+        secretHeader.addEventListener('dblclick', function() {
             switchTab('adminTab');
         });
-        secretBtn.addEventListener('dblclick', function() {
-            switchTab('adminTab');
+        secretHeader.addEventListener('click', function(e) {
+            e.preventDefault();
         });
 
         function logAdminAction(actionDesc) {
@@ -868,7 +858,6 @@
             });
         });
 
-        // تحميل وعرض قائمة المشرفين في جدول الإدارة
         db.ref('admins').on('value', (snap) => {
             const tableDiv = document.getElementById('adminAdminsListTable');
             if(!tableDiv) return;
@@ -896,7 +885,6 @@
             }
         };
 
-        // عرض السجل التاريخي للأحداث الإدارية
         db.ref('audit_logs').limitToLast(20).on('value', (snap) => {
             const listDiv = document.getElementById('adminAuditLogsList');
             if(!listDiv) return;
@@ -970,10 +958,11 @@
             if(tableDiv) tableDiv.innerHTML = tableHtml;
         });
 
+        // تم إصلاح مشكلة كشف الزبائن وعرض الجدول بشكل سليم ومتكامل
         db.ref('clients').on('value', (cSnap) => {
             const listDiv = document.getElementById('adminPendingUsersList');
             const clientsTableDiv = document.getElementById('adminClientsListTable');
-            let html = '';
+            let pendingHtml = '';
             let clientsTableHtml = '<table class="data-table"><tr><th>الزبون</th><th>الهاتف</th><th>الجنس</th><th>الرحلات</th><th>الحالة</th><th>الإجراء</th></tr>';
             let cData = cSnap.val();
             
@@ -981,7 +970,7 @@
                 Object.keys(cData).forEach(ph => {
                     let usr = cData[ph];
                     if(!usr.approved) {
-                        html += `<div style="background:#fff; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;"><p><b>زبون:</b> ${usr.name} | ${ph}</p><button class="btn btn-success" style="padding:4px; font-size:0.75rem;" onclick="db.ref('clients/${ph}').update({approved:true}); logAdminAction('اعتماد الزبون: ${usr.name}');">موافقة</button></div>`;
+                        pendingHtml += `<div style="background:#fff; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;"><p><b>زبون:</b> ${usr.name} | ${ph}</p><button class="btn btn-success" style="padding:4px; font-size:0.75rem;" onclick="db.ref('clients/${ph}').update({approved:true}); logAdminAction('اعتماد الزبون: ${usr.name}');">موافقة</button></div>`;
                     }
                     if(usr.approved) {
                         let remaining = 3 - (usr.tripsUsed || 0);
@@ -991,7 +980,7 @@
                 });
             }
             clientsTableHtml += '</table>';
-            if(listDiv) listDiv.innerHTML = html || '<p style="color:#86198f; font-size:0.85rem;">لا توجد طلبات معلقة للزبائن.</p>';
+            if(listDiv) listDiv.innerHTML = pendingHtml || '<p style="color:#86198f; font-size:0.85rem;">لا توجد طلبات معلقة للزبائن.</p>';
             if(clientsTableDiv) clientsTableDiv.innerHTML = clientsTableHtml;
         });
     </script>
