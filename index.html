@@ -19,6 +19,7 @@
             --text-main: #333333;
             --text-muted: #666666;
             --danger: #dc3545;
+            --whatsapp: #25d366;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; flex-direction: row; }
@@ -53,10 +54,12 @@
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.85rem; }
         input, select, textarea { width: 100%; padding: 10px; border: 2px solid #e1e8ed; border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-        .btn { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.3s; }
+        .btn { background: var(--primary); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.3s; text-align: center; text-decoration: none; display: inline-block; }
         .btn:hover { background: var(--primary-dark); }
         .btn-success { background: var(--accent); }
         .btn-danger { background: var(--danger); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-whatsapp:hover { background: #1ebe57; }
 
         .driver-order-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
         .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
@@ -86,7 +89,6 @@
 <body>
 
     <div class="sidebar">
-        <!-- النقر المزدوج هنا على الشعار لفتح لوحة الإدارة -->
         <div class="sidebar-header" id="adminSecretTrigger" title="بوابة الإدارة">
             <h2><i class="fa-solid fa-car-side"></i> وصلني</h2>
         </div>
@@ -168,11 +170,12 @@
                     <button class="btn btn-success" id="clientRegBtn">إرسال طلب التسجيل</button>
                 </div>
 
-                <div id="clientLockedArea" style="display:none; background: #fff5f5; border: 2px solid #feb2b2; padding: 15px; border-radius: 10px; text-align: center;">
-                    <h3 style="color: #c53030; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-triangle-exclamation"></i> تنبيه: تم استنفاد رحلاتك المجانية الثلاث (3)</h3>
-                    <p style="color: #718096; font-size: 0.85rem; margin-bottom: 12px;">لتفعيل حسابك، يرجى شراء كرت بقيمة **10 دينار** وإرسال الرصيد لأحد الرقمين: 0913368086 أو 0943368086</p>
-                    <div class="form-group" style="max-width: 280px; margin: 0 auto 12px auto;"><input type="text" id="clientCardCodeInput" placeholder="أدخل كود التفعيل"></div>
-                    <button class="btn btn-success" style="max-width: 280px; margin: 0 auto;" id="clientActivateCardBtn">تفعيل الكرت الآن</button>
+                <div id="clientLockedArea" style="display:none; background: #fff5f5; border: 2px solid #feb2b2; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
+                    <h3 style="color: #c53030; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-triangle-exclamation"></i> تنبيه: تم استنفاد رحلاتك المجانية</h3>
+                    <p style="color: #718096; font-size: 0.85rem; margin-bottom: 12px;">يرجى شراء كرت بقيمة **10 دينار** وإرسال الرصيد للرقم **0913368086**، ثم تواصل مع الإدارة عبر الواتساب أو أدخل الكود لتفعيل **10 رحلات مجانية جديدة** لحسابك:</p>
+                    <a id="clientWhatsappLinkBtn" href="https://wa.me/218913368086?text=السلام%20عليكم،%20لقد%20أرسلت%20قيمة%20الكرت%20(10%20د.ل)%20وأريد%20تفعيل%2010%20رحلات%20مجانية%20لحسابي%20في%20منظومة%20وصلني" target="_blank" class="btn btn-whatsapp" style="margin-bottom: 12px;"><i class="fa-brands fa-whatsapp"></i> تواصل مع الإدارة عبر واتساب فوراً (0913368086)</a>
+                    <div class="form-group" style="max-width: 280px; margin: 0 auto 12px auto;"><input type="text" id="clientCardCodeInput" placeholder="أدخل كود تفعيل الكرت هنا"></div>
+                    <button class="btn btn-success" style="max-width: 280px; margin: 0 auto;" id="clientActivateCardBtn">تفعيل الكرت وإضافة 10 رحلات</button>
                     <button class="btn btn-danger" style="max-width: 280px; margin: 8px auto 0 auto;" id="clientLogoutBtn1">تسجيل خروج</button>
                 </div>
 
@@ -180,7 +183,7 @@
                     <div style="background: linear-gradient(135deg, #004080, #006699); color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <p style="font-size: 0.9rem;">مرحباً بك: <span id="clientWelcomeName" style="font-weight:bold;"></span></p>
-                            <p style="margin-top: 3px; font-size: 0.8rem;">الرحلات المجانية المتبقية: <span id="clientRemainingTrips" style="font-weight: bold; color: #ff9900;">3</span></p>
+                            <p style="margin-top: 3px; font-size: 0.8rem;">الرحلات المتبقية: <span id="clientRemainingTrips" style="font-weight: bold; color: #ff9900;">3</span></p>
                         </div>
                         <button class="btn btn-danger" style="width: auto; padding: 6px 12px; font-size: 0.8rem;" id="clientLogoutBtn2">خروج</button>
                     </div>
@@ -224,10 +227,11 @@
                         </div>
                         <button class="btn" id="sendOrderBtn">إرسال الطلب</button>
                     </div>
-                    <div>
-                        <h3 style="font-size: 1rem; margin-bottom: 8px;">طلباتي المسجلة (مع موقع السائق الحي):</h3>
-                        <div id="clientActiveOrdersList"></div>
-                    </div>
+                </div>
+
+                <div id="clientOrdersWrapper" style="display:none; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 15px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 8px; color: var(--primary-dark);">طلباتي المسجلة ومتابعة الرحلات:</h3>
+                    <div id="clientActiveOrdersList"></div>
                 </div>
             </div>
 
@@ -266,8 +270,9 @@
                         <p style="margin-top: 3px; font-size: 0.8rem;">السيارة: <span id="driverCarInfo"></span></p>
                         <button class="btn btn-danger" style="width: auto; padding: 5px 10px; font-size: 0.75rem; margin-top: 8px;" id="driverLogoutBtn">تسجيل خروج</button>
                     </div>
-                    <div style="margin-bottom: 12px; background: #e0f2fe; padding: 12px; border-radius: 8px;">
-                        <button class="btn btn-success" style="padding: 10px; font-size: 0.9rem;" id="shareLocationBtn"><i class="fa-solid fa-location-crosshairs"></i> مشاركة موقعي الحي (GPS)</button>
+                    <div style="margin-bottom: 12px; background: #e0f2fe; padding: 12px; border-radius: 8px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-success" style="flex:1; padding: 10px; font-size: 0.9rem;" id="shareLocationBtn"><i class="fa-solid fa-location-crosshairs"></i> مشاركة موقعي الحي (GPS)</button>
+                        <button class="btn" style="flex:1; padding: 10px; font-size: 0.9rem; background: #004080;" id="enableNotificationsBtn"><i class="fa-solid fa-bell"></i> تفعيل إشعارات الطلبات</button>
                     </div>
                     
                     <div style="margin-bottom: 15px;">
@@ -276,19 +281,18 @@
                     </div>
 
                     <div>
-                        <h3 style="font-size: 1rem; color: var(--primary-dark); margin-bottom: 8px;">كشف الرحلات (منجزة وغير منجزة)</h3>
+                        <h3 style="font-size: 1rem; color: var(--primary-dark); margin-bottom: 8px;">كشف الرحلات (المنجزة وغير المنجزة)</h3>
                         <div id="driverTripHistoryList"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- لوحة التحكم الإدارية (مخفية بالكامل عن الزوار ولا تفتح إلا بالنقر المزدوج على شعار وصلني) -->
+            <!-- لوحة التحكم الإدارية -->
             <div id="adminTab" class="card">
                 <h2 class="section-title">بوابة الإدارة المشفرة</h2>
                 
-                <!-- حقل إدخال رمز الإدارة المخفي عن العامة تماماً -->
                 <div id="adminLoginBox" class="form-group" style="background: #fffbeb; padding: 15px; border-radius: 10px; border: 1px solid #fde68a;">
-                    <label style="color: #92400e;"><i class="fa-solid fa-shield-halved"></i> أدخل مفتاح أو رمز دخول الإدارة:</label>
+                    <label style="color: #92400e;"><i class="fa-solid fa-shield-halved"></i> أدخل مفتاح أو رمز دخول الإدارة (الافتراضي 1234):</label>
                     <input type="password" id="adminPinInput" placeholder="الرمز السري الخاص بالإدارة">
                     <button class="btn" style="margin-top:8px; background: #92400e;" id="adminLoginBtn">تحقق والدخول</button>
                 </div>
@@ -301,35 +305,24 @@
                         <button class="btn btn-success" id="changeAdminPinBtn">حفظ كلمة المرور الجديدة</button>
                     </div>
 
-                    <div style="background: #fffbeb; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #fde68a;">
-                        <h3 style="color: #92400e; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-user-shield"></i> إضافة أدمن جديد وتحديد الصلاحيات</h3>
-                        <div class="form-group"><input type="text" id="newAdminName" placeholder="اسم المشرف"></div>
-                        <div class="form-group"><input type="text" id="newAdminPin" placeholder="الرمز السري الخاص به"></div>
-                        <div class="form-group">
-                            <label>الصلاحية:</label>
-                            <select id="newAdminRole">
-                                <option value="full">أدمن عام (كامل الصلاحيات)</option>
-                                <option value="drivers_only">موافقة السائقين فقط</option>
-                                <option value="cards_only">إصدار الكروت فقط</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-success" id="createAdminBtn">إضافة الأدمن الجديد</button>
-                    </div>
-
-                    <div style="background: #fdf2f8; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #fbcfe8;">
-                        <h3 style="color: #db2777; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-users-gear"></i> قائمة المشرفين (الأدمن) المسجلين</h3>
-                        <div id="adminAdminsListTable" style="max-height: 160px; overflow-y: auto;"></div>
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f59e0b;">
+                        <h3 style="color: #b45309; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-ticket"></i> نظام توليد وإدارة كروت الشحن (تمنح 10 رحلات مجانية)</h3>
+                        <div class="form-group"><input type="text" id="newCardCodeInput" placeholder="أدخل كود الكرت (مثال: WAS-9955)"></div>
+                        <button class="btn btn-success" id="generateCardBtn" style="background: #b45309; margin-bottom: 10px;">إنشاء وتوليد كرت جديد</button>
+                        
+                        <h4 style="font-size: 0.9rem; color: #92400e; margin-bottom: 5px;">سجل الكروت (المستخدمة وغير المستخدمة):</h4>
+                        <div id="adminCardsListTable" style="max-height: 160px; overflow-y: auto;"></div>
                     </div>
 
                     <div style="background: #f0fdf4; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #bbf7d0;">
-                        <h3 style="color: #166534; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-map-location-dot"></i> إضافة منطقة جديدة للقائمة</h3>
-                        <div class="form-group"><input type="text" id="newRegionInput" placeholder="اسم المنطقة الجديدة (مثال: الزاوية، الجفرة...)"></div>
-                        <button class="btn btn-success" id="addRegionBtn">إضافة المنطقة للنظام</button>
+                        <h3 style="color: #166534; margin-bottom: 8px; font-size: 1rem;"><i class="fa-brands fa-whatsapp"></i> تنبيهات وإشعارات الواتساب للإدارة (0913368086)</h3>
+                        <p style="font-size: 0.85rem; color: #15803d; margin-bottom: 8px;">مخصص فقط لتنبيهات طلبات تسجيل (الزبائن) و(السائقين) الجدد:</p>
+                        <a id="adminWhatsAppAlertLink" href="https://wa.me/218913368086?text=السلام%20عليكم،%20أنا%20مشرف%20منظومة%20وصلني%20وأريد%20متابعة%20طلبات%20التسجيل" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> فتح مراسلة واتساب الإدارة (0913368086)</a>
                     </div>
 
                     <div style="background: #faf5ff; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e9d5ff;">
-                        <h3 style="color: #6b21a8; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-book-open"></i> بوكس الشكاوى والملاحظات الواردة</h3>
-                        <div id="adminComplaintsList" style="max-height: 180px; overflow-y: auto;"></div>
+                        <h3 style="color: #6b21a8; margin-bottom: 8px; font-size: 1rem;"><i class="fa-solid fa-book-open"></i> بوكس الشكاوى والملاحظات الواردة (مع إمكانية الحذف)</h3>
+                        <div id="adminComplaintsList" style="max-height: 220px; overflow-y: auto;"></div>
                     </div>
 
                     <div style="background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1;">
@@ -347,10 +340,10 @@
                         <div id="adminPendingUsersList" style="margin-top: 8px;"></div>
                     </div>
 
-                    <h3 style="font-size: 0.95rem; margin-bottom: 5px;">كشف السائقين المسجلين (مع إمكانية الحذف)</h3>
+                    <h3 style="font-size: 0.95rem; margin-bottom: 5px;">كشف السائقين المسجلين</h3>
                     <div style="max-height: 180px; overflow-y: auto; margin-bottom: 15px;" id="adminDriversListTable"></div>
 
-                    <h3 style="font-size: 0.95rem; margin-bottom: 5px;">كشف الزبائن المسجلين في المنظومة (مع إمكانية الحذف)</h3>
+                    <h3 style="font-size: 0.95rem; margin-bottom: 5px;">كشف الزبائن المسجلين في المنظومة</h3>
                     <div style="max-height: 200px; overflow-y: auto;" id="adminClientsListTable"></div>
                 </div>
             </div>
@@ -361,6 +354,8 @@
         </footer>
     </div>
 
+    <audio id="adminAlertSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
     <script>
         const firebaseConfig = { databaseURL: "https://waselni-shatea-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
@@ -368,8 +363,8 @@
 
         let currentClientPhone = null;
         let currentDriverPhone = null;
-        let currentAdminRole = 'full';
         let loggedAdminName = 'مشرف رئيسي';
+        let lastKnownOrderCountForAdmin = 0;
 
         db.ref(".info/connected").on("value", (snap) => {
             const dot = document.getElementById("connectionDot");
@@ -401,13 +396,27 @@
             });
         });
 
-        // تفعيل الدخول للإدارة عبر النقر المزدوج (Double Click) على شعار وصلني في الشريط الجانبي
         const secretHeader = document.getElementById('adminSecretTrigger');
         secretHeader.addEventListener('dblclick', function() {
             switchTab('adminTab');
         });
         secretHeader.addEventListener('click', function(e) {
             e.preventDefault();
+        });
+
+        document.getElementById('enableNotificationsBtn').addEventListener('click', function() {
+            if (!("Notification" in window)) {
+                alert("متصفحك لا يدعم الإشعارات المنبثقة.");
+            } else {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        alert("✅ تم تفعيل إشعارات التطبيق بنجاح!");
+                        new Notification("وصلني الشاطئ", { body: "تم تفعيل التنبيهات بنجاح لتلقي الطلبات الجديدة." });
+                    } else {
+                        alert("❌ تم رفض إذن الإشعارات من المتصفح.");
+                    }
+                });
+            }
         });
 
         function logAdminAction(actionDesc) {
@@ -436,16 +445,6 @@
             });
         }
         loadRegionsToSelects();
-
-        document.getElementById('addRegionBtn').addEventListener('click', function() {
-            const regName = document.getElementById('newRegionInput').value.trim();
-            if(!regName) { alert('أدخل اسم المنطقة.'); return; }
-            db.ref('regions').push(regName).then(() => {
-                alert('✅ تم إضافة المنطقة بنجاح للقوائم.');
-                logAdminAction(`إضافة منطقة جديدة: ${regName}`);
-                document.getElementById('newRegionInput').value = '';
-            });
-        });
 
         document.getElementById('sendComplaintBtn').addEventListener('click', function() {
             const name = document.getElementById('complaintName').value.trim() || 'زائري الكريم';
@@ -504,6 +503,7 @@
         document.getElementById('tripType').addEventListener('change', calculateOrderPrice);
         document.getElementById('clientBasePrice').addEventListener('input', calculateOrderPrice);
 
+        // عند تسجيل زبون جديد: يتم إرسال إشعار وتساب للإدارة حصرياً
         document.getElementById('clientRegBtn').addEventListener('click', function() {
             const name = document.getElementById('clientRegName').value.trim();
             const phone = document.getElementById('clientRegPhone').value.trim();
@@ -516,8 +516,11 @@
                 if(snap.val()) {
                     alert('رقم الهاتف مسجل مسبقاً!');
                 } else {
-                    db.ref('clients/' + phone).set({ name, pin, gender, tripsUsed: 0, isLocked: false, approved: false }).then(() => {
-                        alert('⏳ تم إرسال طلب تسجيلك للإدارة بنجاح.');
+                    db.ref('clients/' + phone).set({ name, pin, gender, tripsUsed: 0, maxTrips: 3, isLocked: false, approved: false }).then(() => {
+                        let waText = `السلام عليكم إدارة وصلني، يوجد طلب تسجيل زبون جديد:%0A- الاسم: ${name}%0A- الهاتف: ${phone}%0A- الجنس: ${gender}`;
+                        window.open(`https://wa.me/218913368086?text=${waText}`, '_blank');
+
+                        alert('⏳ تم إرسال طلب تسجيلك للإدارة بنجاح وتنبيه الإدارة عبر الواتساب.');
                         toggleAuthMode('client', 'login');
                     });
                 }
@@ -545,8 +548,11 @@
             document.getElementById('clientLoginBox').style.display = 'none';
             document.getElementById('clientRegisterBox').style.display = 'none';
             document.getElementById('clientAuthSwitchBtns').style.display = 'none';
+            document.getElementById('clientOrdersWrapper').style.display = 'block';
 
-            let remaining = 3 - (clientData.tripsUsed || 0);
+            let maxT = clientData.maxTrips || 3;
+            let remaining = maxT - (clientData.tripsUsed || 0);
+            if(remaining < 0) remaining = 0;
 
             if(remaining <= 0 || clientData.isLocked) {
                 document.getElementById('clientLockedArea').style.display = 'block';
@@ -556,8 +562,8 @@
                 document.getElementById('clientDashboardArea').style.display = 'block';
                 document.getElementById('clientWelcomeName').innerText = clientData.name;
                 document.getElementById('clientRemainingTrips').innerText = remaining;
-                loadClientActiveOrders();
             }
+            loadClientActiveOrders();
         }
 
         document.getElementById('clientActivateCardBtn').addEventListener('click', function() {
@@ -565,11 +571,21 @@
             if(!codeInput) { alert('أدخل كود الكرت.'); return; }
 
             db.ref('cards/' + codeInput).once('value').then((snap) => {
-                if(!snap.val() || snap.val().used) { alert('كود الكرت غير صحيح أو مستخدم مسبقاً!'); return; }
-                db.ref('cards/' + codeInput).update({ used: true, usedBy: currentClientPhone });
-                db.ref('clients/' + currentClientPhone).update({ tripsUsed: 0, isLocked: false }).then(() => {
-                    alert('🎉 تم تفعيل الكرت بنجاح!');
-                    db.ref('clients/' + currentClientPhone).once('value').then(s => loadClientDashboard(s.val()));
+                if(!snap.val()) { alert('كود الكرت غير صحيح!'); return; }
+                if(snap.val().used) { alert('⚠️ هذا الكرت مستخدم مسبقاً ولا يمكن استخدامه مرة أخرى!'); return; }
+                
+                db.ref('cards/' + codeInput).update({ used: true, usedBy: currentClientPhone, usedAt: new Date().toLocaleString('ar-LY') });
+                
+                db.ref('clients/' + currentClientPhone).once('value').then((clientSnap) => {
+                    let cData = clientSnap.val();
+                    let currentUsed = cData.tripsUsed || 0;
+                    let newMax = currentUsed + 10;
+
+                    db.ref('clients/' + currentClientPhone).update({ maxTrips: newMax, isLocked: false }).then(() => {
+                        alert('🎉 تم تفعيل الكرت بنجاح وإضافة 10 رحلات جديدة لحسابك!');
+                        document.getElementById('clientCardCodeInput').value = '';
+                        db.ref('clients/' + currentClientPhone).once('value').then(s => loadClientDashboard(s.val()));
+                    });
                 });
             });
         });
@@ -578,6 +594,7 @@
             currentClientPhone = null;
             document.getElementById('clientDashboardArea').style.display = 'none';
             document.getElementById('clientLockedArea').style.display = 'none';
+            document.getElementById('clientOrdersWrapper').style.display = 'none';
             document.getElementById('clientAuthSwitchBtns').style.display = 'flex';
             toggleAuthMode('client', 'login');
         }
@@ -585,6 +602,7 @@
         document.getElementById('clientLogoutBtn1').addEventListener('click', logoutClient);
         document.getElementById('clientLogoutBtn2').addEventListener('click', logoutClient);
 
+        // عند إرسال طلب رحلة جديد: تم إلغاء فتح وتساب الإدارة هنا تماماً بناءً على طلبك
         document.getElementById('sendOrderBtn').addEventListener('click', function() {
             if(!currentClientPhone) return;
             const service = document.getElementById('serviceType').value;
@@ -602,7 +620,8 @@
             db.ref('clients/' + currentClientPhone).once('value').then((snapshot) => {
                 const clientData = snapshot.val();
                 let tripsUsed = (clientData.tripsUsed || 0) + 1;
-                let isLocked = tripsUsed > 3;
+                let maxT = clientData.maxTrips || 3;
+                let isLocked = tripsUsed > maxT;
                 const operationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
                 db.ref('orders').push({
@@ -622,7 +641,7 @@
                     timestamp: Date.now()
                 }).then(() => {
                     db.ref('clients/' + currentClientPhone).update({ tripsUsed, isLocked }).then(() => {
-                        alert('🎉 تم إرسال الطلب بنجاح! كود التتبع: [ ' + operationCode + ' ]');
+                        alert('🎉 تم إرسال الطلب بنجاح داخل المنظومة! كود التتبع: [ ' + operationCode + ' ]');
                         document.getElementById('clientBasePrice').value = '';
                         document.getElementById('clientFinalCalculatedPrice').value = '';
                         db.ref('clients/' + currentClientPhone).once('value').then(s => loadClientDashboard(s.val()));
@@ -672,6 +691,42 @@
             }
         }
 
+        db.ref('orders').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                let keys = Object.keys(data);
+                if(keys.length > lastKnownOrderCountForAdmin && lastKnownOrderCountForAdmin !== 0) {
+                    const alertSound = document.getElementById('adminAlertSound');
+                    if(alertSound) alertSound.play().catch(e => console.log(e));
+                }
+                lastKnownOrderCountForAdmin = keys.length;
+            }
+        });
+
+        document.getElementById('generateCardBtn').addEventListener('click', function() {
+            const code = document.getElementById('newCardCodeInput').value.trim();
+            if(!code) { alert('أدخل كود الكرت.'); return; }
+            db.ref('cards/' + code).set({ used: false, createdAt: new Date().toLocaleString('ar-LY') }).then(() => {
+                alert('✅ تم إنشاء وتوليد الكرت بنجاح.');
+                document.getElementById('newCardCodeInput').value = '';
+            });
+        });
+
+        db.ref('cards').on('value', (snap) => {
+            const tableDiv = document.getElementById('adminCardsListTable');
+            const data = snap.val();
+            if(!data) { tableDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد كروت مسجلة.</p>'; return; }
+            
+            let html = '<table class="data-table"><tr><th>الكود</th><th>الحالة</th><th>تاريخ الإنشاء</th></tr>';
+            Object.keys(data).forEach(c => {
+                let card = data[c];
+                html += `<tr><td><b>${c}</b></td><td>${card.used ? '<span style="color:red;">مستخدم</span>' : '<span style="color:green;">غير مستخدم</span>'}</td><td>${card.createdAt || '-'}</td></tr>`;
+            });
+            html += '</table>';
+            tableDiv.innerHTML = html;
+        });
+
+        // عند تسجيل كابتن جديد: يتم إرسال إشعار وتساب للإدارة حصرياً
         document.getElementById('driverRegBtn').addEventListener('click', function() {
             const name = document.getElementById('driverRegName').value.trim();
             const title = document.getElementById('driverRegTitle').value.trim();
@@ -681,7 +736,10 @@
 
             if(!name || !phone || !car) { alert('أدخل كافة البيانات.'); return; }
             db.ref('drivers/' + phone).set({ fullName: name, title: title || 'كابتن', whatsapp: phone, carType: car, gender, approved: false }).then(() => {
-                alert('⏳ تم إرسال طلب انضمامك بنجاح.');
+                let waText = `السلام عليكم إدارة وصلني، يوجد طلب انضمام كابتن جديد:%0A- الاسم: ${name}%0A- الهاتف: ${phone}%0A- السيارة: ${car}`;
+                window.open(`https://wa.me/218913368086?text=${waText}`, '_blank');
+
+                alert('⏳ تم إرسال طلب انضمامك بنجاح وتنبيه الإدارة عبر الواتساب.');
                 toggleAuthMode('driver', 'login');
             });
         });
@@ -702,10 +760,9 @@
             document.getElementById('driverRegisterBox').style.display = 'none';
             document.getElementById('driverAuthSwitchBtns').style.display = 'none';
             document.getElementById('driverDashboardArea').style.display = 'block';
-            document.getElementById('driverWelcomeName').innerText = driverData.title + ' ' + driverData.fullName;
+            document.getElementById('driverWelcomeName').innerText = driverData.fullName;
             document.getElementById('driverCarInfo').innerText = driverData.carType;
-            loadDriverAvailableOrders(driverData.gender || 'ذكر');
-            loadDriverTripHistory();
+            loadDriverOrders();
         }
 
         document.getElementById('driverLogoutBtn').addEventListener('click', function() {
@@ -715,273 +772,217 @@
             toggleAuthMode('driver', 'login');
         });
 
-        document.getElementById('shareLocationBtn').addEventListener('click', function() {
-            if(!currentDriverPhone) return;
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    let mapLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    db.ref('drivers/' + currentDriverPhone).update({ location: mapLink }).then(() => alert('📍 تم تحديث وبث موقعك الحي للزبون بنجاح!'));
-                });
-            }
-        });
+        function loadDriverOrders() {
+            const listDiv = document.getElementById('driversOrdersList');
+            const historyDiv = document.getElementById('driverTripHistoryList');
 
-        function loadDriverAvailableOrders(driverGender) {
             db.ref('orders').on('value', (snapshot) => {
                 const data = snapshot.val();
-                const driverList = document.getElementById('driversOrdersList');
-                if(!driverList) return;
-                driverList.innerHTML = '';
-                if(!data) { driverList.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem;">لا توجد طلبات متاحة.</p>'; return; }
-
-                let count = 0;
-                Object.keys(data).forEach(key => {
-                    let ord = data[key];
-                    if(ord.status === 'قيد الانتظار') {
-                        if(ord.clientGender === 'أنثى' && driverGender !== 'أنثى') return;
-                        count++;
-                        let item = document.createElement('div');
-                        item.className = 'driver-order-item';
-                        item.innerHTML = `<h4 style="font-size:0.95rem;">كود: [ ${ord.operationCode} ] - ${ord.serviceType} (${ord.tripType || 'ذهاب فقط'})</h4>` +
-                                         `<p style="font-size:0.85rem;">من: ${ord.pickupLocation} ➔ إلى: ${ord.dropoffLocation}</p>` +
-                                         `<p style="font-size:0.85rem;">السعر: <b>${ord.price}</b></p>`;
-                        let btn = document.createElement('button');
-                        btn.className = 'btn btn-success'; btn.style.marginTop = '8px'; btn.style.padding = '8px'; btn.style.fontSize = '0.85rem';
-                        btn.innerText = 'قبول الطلب';
-                        btn.onclick = () => {
-                            db.ref('drivers/' + currentDriverPhone).once('value').then((snap) => {
-                                let dr = snap.val();
-                                db.ref('orders/' + key).update({ 
-                                    status: 'مقبولة', 
-                                    driverName: dr.title + ' (' + dr.fullName + ')',
-                                    driverPhone: currentDriverPhone 
-                                }).then(() => alert('تم قبول الطلب بنجاح!'));
-                            });
-                        };
-                        item.appendChild(btn);
-                        driverList.appendChild(item);
-                    }
-                });
-                if(count === 0) driverList.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.85rem;">لا توجد طلبات متاحة مطابقة.</p>';
-            });
-        }
-
-        function loadDriverTripHistory() {
-            if(!currentDriverPhone) return;
-            db.ref('orders').on('value', (snap) => {
-                const historyDiv = document.getElementById('driverTripHistoryList');
-                if(!historyDiv) return;
+                listDiv.innerHTML = '';
                 historyDiv.innerHTML = '';
-                let data = snap.val();
-                if(!data) { historyDiv.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">لا توجد رحلات سابقة.</p>'; return; }
+                if(!data) { 
+                    listDiv.innerHTML = '<p style="font-size:0.85rem;">لا توجد طلبات متاحة.</p>'; 
+                    historyDiv.innerHTML = '<p style="font-size:0.85rem;">لا توجد رحلات سابقة.</p>';
+                    return; 
+                }
 
-                let count = 0;
+                let hasActive = false;
+                let hasHistory = false;
+
                 Object.keys(data).forEach(k => {
                     let ord = data[k];
-                    if(ord.driverPhone === currentDriverPhone) {
-                        count++;
-                        let isDone = (ord.status === 'مكتملة');
+                    if(ord.status === 'قيد الانتظار') {
+                        hasActive = true;
                         let div = document.createElement('div');
-                        div.style.background = isDone ? '#f0fdf4' : '#f8fafc';
-                        div.style.border = isDone ? '1px solid #bbf7d0' : '1px solid #e2e8f0';
-                        div.style.padding = '8px'; div.style.borderRadius = '8px'; div.style.marginBottom = '6px'; div.style.fontSize = '0.85rem';
-                        div.innerHTML = `<p><b>رحلة [${ord.operationCode}]</b> | الزبون: ${ord.clientName}</p>` +
-                                        `<p>${ord.pickupLocation} ➔ ${ord.dropoffLocation}</p>` +
-                                        `<p>حالة الرحلة: <b style="color:${isDone ? 'var(--accent)' : 'var(--secondary)'};">${ord.status}</b></p>`;
-                        historyDiv.appendChild(div);
+                        div.className = 'driver-order-item';
+                        div.innerHTML = `<p><b>كود: ${ord.operationCode}</b> | ${ord.serviceType} (${ord.tripType || 'ذهاب فقط'})</p>` +
+                                      `<p>من: ${ord.pickupLocation} ➔ إلى: ${ord.dropoffLocation}</p>` +
+                                      `<p>الملاحظات: ${ord.notes} | <b>السعر: ${ord.price}</b></p>` +
+                                      `<button class="btn btn-success" style="margin-top:8px; padding:6px; font-size:0.85rem;" onclick="acceptOrder('${k}')">قبول الطلب والتوجه للزبون</button>`;
+                        listDiv.appendChild(div);
+                    }
+
+                    if(ord.driverPhone === currentDriverPhone) {
+                        hasHistory = true;
+                        let hDiv = document.createElement('div');
+                        hDiv.className = 'driver-order-item';
+                        let statusColor = ord.status === 'مكتملة' ? 'color: var(--accent); font-weight: bold;' : 'color: var(--secondary); font-weight: bold;';
+                        
+                        hDiv.innerHTML = `<p><b>كود الرحلة: ${ord.operationCode}</b> | ${ord.serviceType}</p>` +
+                                         `<p>من: ${ord.pickupLocation} ➔ إلى: ${ord.dropoffLocation} | <b>${ord.price}</b></p>` +
+                                         `<p>حالة الرحلة: <span style="${statusColor}">${ord.status === 'مكتملة' ? 'منجزة ✓' : ord.status}</span></p>`;
+                        historyDiv.appendChild(hDiv);
                     }
                 });
-                if(count === 0) historyDiv.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">لم تقم بأي رحلات بعد.</p>';
+
+                if(!hasActive) listDiv.innerHTML = '<p style="font-size:0.85rem;">لا توجد طلبات جديدة متاحة حالياً.</p>';
+                if(!hasHistory) historyDiv.innerHTML = '<p style="font-size:0.85rem;">لا توجد رحلات مسجلة في كشفك حتى الآن.</p>';
             });
         }
+
+        window.acceptOrder = function(orderId) {
+            if(!currentDriverPhone) return;
+            db.ref('drivers/' + currentDriverPhone).once('value').then(snap => {
+                const drv = snap.val();
+                db.ref('orders/' + orderId).update({
+                    status: 'مقبولة',
+                    driverName: drv.fullName + ' (' + drv.carType + ')',
+                    driverPhone: currentDriverPhone
+                }).then(() => alert('✅ تم قبول الطلب بنجاح.'));
+            });
+        }
+
+        document.getElementById('shareLocationBtn').addEventListener('click', function() {
+            if (!navigator.geolocation) { alert("متصفحك لا يدعم تحديد الموقع."); return; }
+            navigator.geolocation.watchPosition((pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                const mapUrl = `https://maps.google.com/?q=${lat},${lon}`;
+                if(currentDriverPhone) {
+                    db.ref('drivers/' + currentDriverPhone + '/location').set(mapUrl);
+                }
+            }, (err) => console.log(err), { enableHighAccuracy: true });
+            alert("📍 تم تفعيل ومشاركة موقعك الحي.");
+        });
 
         document.getElementById('adminLoginBtn').addEventListener('click', function() {
             const pin = document.getElementById('adminPinInput').value.trim();
-            db.ref('settings/adminPin').once('value').then((snap) => {
-                let mainPin = snap.val() || '12345';
-                if(pin === mainPin) {
-                    currentAdminRole = 'full';
-                    loggedAdminName = 'مشرف رئيسي (المالك)';
-                    openAdminPanel();
+            db.ref('admin_settings/pin').once('value').then((snap) => {
+                let savedPin = snap.val() || '1234';
+                if(pin === savedPin) {
+                    document.getElementById('adminLoginBox').style.display = 'none';
+                    document.getElementById('adminContentPanel').style.display = 'block';
+                    loadAdminData();
                 } else {
-                    db.ref('admins/' + pin).once('value').then((subSnap) => {
-                        if(subSnap.val()) {
-                            currentAdminRole = subSnap.val().role;
-                            loggedAdminName = subSnap.val().name + ' (فرعي)';
-                            openAdminPanel();
-                        } else {
-                            alert('الرمز السري خطأ!');
-                        }
-                    });
+                    alert('رمز الإدارة خطأ!');
                 }
             });
         });
 
-        function openAdminPanel() {
-            document.getElementById('adminLoginBox').style.display = 'none';
-            document.getElementById('adminContentPanel').style.display = 'block';
-            logAdminAction('تسجيل دخول لوحة الإدارة');
-            alert('مرحباً بك في لوحة الإدارة.');
+        function loadAdminData() {
+            db.ref('clients').on('value', snap => {
+                const pendingDiv = document.getElementById('adminPendingUsersList');
+                const tableDiv = document.getElementById('adminClientsListTable');
+                const data = snap.val();
+                pendingDiv.innerHTML = '';
+                tableDiv.innerHTML = '';
+                
+                if(!data) { 
+                    pendingDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد طلبات زبائن بانتظار الموافقة.</p>'; 
+                    tableDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد بيانات زبائن.</p>';
+                    return; 
+                }
+
+                let tableHtml = '<table class="data-table"><tr><th>الاسم</th><th>الهاتف</th><th>الجنس</th><th>الرحلات المستخدمة</th><th>الحالة</th></tr>';
+                let hasPending = false;
+
+                Object.keys(data).forEach(ph => {
+                    let u = data[ph];
+                    tableHtml += `<tr><td>${u.name}</td><td>${ph}</td><td>${u.gender || '-'}</td><td>${u.tripsUsed || 0} / ${u.maxTrips || 3}</td><td>${u.approved ? '<span style="color:green;">معتمد</span>' : '<span style="color:orange;">قيد الانتظار</span>'}</td></tr>`;
+                    
+                    if(!u.approved) {
+                        hasPending = true;
+                        pendingDiv.innerHTML += `<div style="background:#fff; padding:8px; margin-bottom:5px; border-radius:6px; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;">` +
+                                                 `<span>${u.name} (${ph})</span>` +
+                                                 `<button class="btn btn-success" style="width:auto; padding:4px 8px; font-size:0.75rem;" onclick="approveClient('${ph}')">موافقة وتفعيل</button></div>`;
+                    }
+                });
+                tableHtml += '</table>';
+                tableDiv.innerHTML = tableHtml;
+                if(!hasPending) pendingDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد طلبات زبائن معلقة.</p>';
+            });
+
+            db.ref('drivers').on('value', snap => {
+                const pendingDiv = document.getElementById('adminPendingDriversList');
+                const tableDiv = document.getElementById('adminDriversListTable');
+                const data = snap.val();
+                pendingDiv.innerHTML = '';
+                tableDiv.innerHTML = '';
+
+                if(!data) { 
+                    pendingDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد طلبات سائقين بانتظار الموافقة.</p>'; 
+                    tableDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد بيانات سائقين.</p>';
+                    return; 
+                }
+
+                let tableHtml = '<table class="data-table"><tr><th>اسم الكابتن</th><th>الهاتف</th><th>السيارة</th><th>الحالة</th></tr>';
+                let hasPending = false;
+
+                Object.keys(data).forEach(ph => {
+                    let d = data[ph];
+                    tableHtml += `<tr><td>${d.fullName}</td><td>${ph}</td><td>${d.carType}</td><td>${d.approved ? '<span style="color:green;">معتمد</span>' : '<span style="color:orange;">قيد الانتظار</span>'}</td></tr>`;
+                    
+                    if(!d.approved) {
+                        hasPending = true;
+                        pendingDiv.innerHTML += `<div style="background:#fff; padding:8px; margin-bottom:5px; border-radius:6px; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;">` +
+                                                 `<span>${d.fullName} - ${d.carType} (${ph})</span>` +
+                                                 `<button class="btn btn-success" style="width:auto; padding:4px 8px; font-size:0.75rem;" onclick="approveDriver('${ph}')">موافقة وتفعيل</button></div>`;
+                    }
+                });
+                tableHtml += '</table>';
+                tableDiv.innerHTML = tableHtml;
+                if(!hasPending) pendingDiv.innerHTML = '<p style="font-size:0.8rem;">لا توجد طلبات سائقين معلقة.</p>';
+            });
+
+            db.ref('complaints').on('value', snap => {
+                const div = document.getElementById('adminComplaintsList');
+                const data = snap.val();
+                div.innerHTML = '';
+                if(!data) { div.innerHTML = '<p style="font-size:0.8rem;">لا توجد شكاوى مسجلة.</p>'; return; }
+                Object.keys(data).forEach(k => {
+                    let c = data[k];
+                    div.innerHTML += `<div style="background:#fff; padding:10px; margin-bottom:6px; border-radius:6px; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;">` +
+                                     `<div><p><b>${c.name}:</b> ${c.text}</p></div>` +
+                                     `<button class="btn btn-danger" style="width:auto; padding:5px 10px; font-size:0.75rem;" onclick="deleteComplaint('${k}')"><i class="fa-solid fa-trash"></i> مسح</button></div>`;
+                });
+            });
+
+            db.ref('audit_logs').on('value', snap => {
+                const div = document.getElementById('adminAuditLogsList');
+                const data = snap.val();
+                div.innerHTML = '';
+                if(!data) { div.innerHTML = '<p style="font-size:0.8rem;">لا توجد سجلات.</p>'; return; }
+                Object.keys(data).forEach(k => {
+                    let l = data[k];
+                    div.innerHTML += `<p>[${l.timestamp}] <b>${l.admin}:</b> ${l.action}</p>`;
+                });
+            });
+        }
+
+        window.approveClient = function(phone) {
+            db.ref('clients/' + phone).update({ approved: true }).then(() => alert('✅ تمت الموافقة على الزبون بنجاح.'));
+        }
+
+        window.approveDriver = function(phone) {
+            db.ref('drivers/' + phone).update({ approved: true }).then(() => alert('✅ تمت الموافقة على الكابتن بنجاح.'));
+        }
+
+        window.deleteComplaint = function(complaintId) {
+            if(confirm('هل أنت متأكد من مسح هذه الشكوى أو الملاحظة؟')) {
+                db.ref('complaints/' + complaintId).remove().then(() => {
+                    alert('✅ تم مسح الشكوى بنجاح.');
+                    logAdminAction('حذف شكوى أو ملاحظة من النظام');
+                });
+            }
         }
 
         document.getElementById('changeAdminPinBtn').addEventListener('click', function() {
-            const currentPinInput = document.getElementById('currentAdminPinCheck').value.trim();
+            const current = document.getElementById('currentAdminPinCheck').value.trim();
             const newPin = document.getElementById('newAdminMainPin').value.trim();
-            
-            if(!currentPinInput || !newPin) { alert('الرجاء إدخال كلمة المرور الحالية والجديدة.'); return; }
+            if(!newPin) { alert('أدخل الرمز السري الجديد.'); return; }
 
-            db.ref('settings/adminPin').once('value').then((snap) => {
-                let currentMainPin = snap.val() || '12345';
-                if(currentPinInput !== currentMainPin) {
-                    alert('❌ كلمة المرور الحالية غير صحيحة!');
-                    return;
+            db.ref('admin_settings/pin').once('value').then(snap => {
+                let saved = snap.val() || '1234';
+                if(current === saved) {
+                    db.ref('admin_settings').update({ pin: newPin }).then(() => {
+                        alert('✅ تم تغيير كلمة المرور الرئيسية للإدارة بنجاح.');
+                        document.getElementById('currentAdminPinCheck').value = '';
+                        document.getElementById('newAdminMainPin').value = '';
+                    });
+                } else {
+                    alert('كلمة المرور الحالية غير صحيحة!');
                 }
-                db.ref('settings').update({ adminPin: newPin }).then(() => {
-                    alert('✅ تم تغيير كلمة مرور الإدارة الرئيسية بنجاح.');
-                    logAdminAction('تغيير كلمة المرور الرئيسية للإدارة');
-                    document.getElementById('currentAdminPinCheck').value = '';
-                    document.getElementById('newAdminMainPin').value = '';
-                });
             });
-        });
-
-        document.getElementById('createAdminBtn').addEventListener('click', function() {
-            const name = document.getElementById('newAdminName').value.trim();
-            const pin = document.getElementById('newAdminPin').value.trim();
-            const role = document.getElementById('newAdminRole').value;
-
-            if(!name || !pin) { alert('أدخل الاسم والرمز السري للأدمن.'); return; }
-            db.ref('admins/' + pin).set({ name, role }).then(() => {
-                alert('✅ تم إنشاء الأدمن الجديد بنجاح.');
-                logAdminAction(`إضافة مشرف جديد: ${name}`);
-                document.getElementById('newAdminName').value = '';
-                document.getElementById('newAdminPin').value = '';
-            });
-        });
-
-        db.ref('admins').on('value', (snap) => {
-            const tableDiv = document.getElementById('adminAdminsListTable');
-            if(!tableDiv) return;
-            let html = '<table class="data-table"><tr><th>اسم المشرف</th><th>الرمز (البن)</th><th>الصلاحية</th><th>الإجراء</th></tr>';
-            let data = snap.val();
-            if(data) {
-                Object.keys(data).forEach(pin => {
-                    let ad = data[pin];
-                    let roleName = ad.role === 'full' ? 'أدمن عام' : (ad.role === 'drivers_only' ? 'سائقين فقط' : 'كروت فقط');
-                    html += `<tr><td>${ad.name}</td><td>${pin}</td><td>${roleName}</td><td><button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="deleteAdmin('${pin}')">حذف</button></td></tr>`;
-                });
-            } else {
-                html += '<tr><td colspan="4" style="text-align:center;">لا توجد حسابات مشرفين فرعيين مسجلة.</td></tr>';
-            }
-            html += '</table>';
-            tableDiv.innerHTML = html;
-        });
-
-        window.deleteAdmin = function(pin) {
-            if(confirm('⚠️ هل أنت متأكد من حذف حساب هذا المشرف؟')) {
-                db.ref('admins/' + pin).remove().then(() => {
-                    alert('✅ تم حذف المشرف بنجاح.');
-                    logAdminAction(`حذف مشرف برمز: ${pin}`);
-                });
-            }
-        };
-
-        db.ref('audit_logs').limitToLast(20).on('value', (snap) => {
-            const listDiv = document.getElementById('adminAuditLogsList');
-            if(!listDiv) return;
-            listDiv.innerHTML = '';
-            let data = snap.val();
-            if(!data) { listDiv.innerHTML = '<p style="color:var(--text-muted);">لا توجد سجلات تاريخية حتى الآن.</p>'; return; }
-
-            let items = [];
-            Object.keys(data).forEach(k => items.push(data[k]));
-            items.reverse().forEach(log => {
-                let div = document.createElement('div');
-                div.style.background = '#fff'; div.style.padding = '6px 8px'; div.style.borderRadius = '4px'; div.style.marginBottom = '4px';
-                div.innerHTML = `<span style="color:var(--primary-dark); font-weight:bold;">[${log.timestamp}]</span> <b>${log.admin}:</b> ${log.action}`;
-                listDiv.appendChild(div);
-            });
-        });
-
-        db.ref('complaints').on('value', (snap) => {
-            const listDiv = document.getElementById('adminComplaintsList');
-            if(!listDiv) return;
-            listDiv.innerHTML = '';
-            let data = snap.val();
-            if(!data) { listDiv.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">لا توجد شكاوى أو ملاحظات مسجلة.</p>'; return; }
-
-            Object.keys(data).forEach(k => {
-                let c = data[k];
-                let item = document.createElement('div');
-                item.style.background = '#fff'; item.style.padding = '8px'; item.style.borderRadius = '6px'; item.style.marginBottom = '6px'; item.style.fontSize = '0.85rem';
-                item.innerHTML = `<p><b>المرسل:</b> ${c.name}</p><p style="margin-top:3px; color:#333;">${c.text}</p>`;
-                listDiv.appendChild(item);
-            });
-        });
-
-        window.deleteDriver = function(phone) {
-            if(confirm('⚠️ هل أنت متأكد من حذف هذا السائق نهائياً من النظام؟')) {
-                db.ref('drivers/' + phone).remove().then(() => {
-                    alert('✅ تم حذف السائق بنجاح.');
-                    logAdminAction(`حذف السائق برقم: ${phone}`);
-                });
-            }
-        };
-
-        window.deleteClient = function(phone) {
-            if(confirm('⚠️ هل أنت متأكد من حذف هذا الزبون نهائياً من النظام؟')) {
-                db.ref('clients/' + phone).remove().then(() => {
-                    alert('✅ تم حذف الزبون بنجاح.');
-                    logAdminAction(`حذف الزبون برقم: ${phone}`);
-                });
-            }
-        };
-
-        db.ref('drivers').on('value', (dSnap) => {
-            const listDiv = document.getElementById('adminPendingDriversList');
-            const tableDiv = document.getElementById('adminDriversListTable');
-            let pendingHtml = '';
-            let tableHtml = '<table class="data-table"><tr><th>الكابتن</th><th>الهاتف</th><th>السيارة</th><th>الإجراء</th></tr>';
-            let dData = dSnap.val();
-            
-            if(dData) {
-                Object.keys(dData).forEach(ph => {
-                    let drv = dData[ph];
-                    if(!drv.approved) {
-                        pendingHtml += `<div style="background:#fff; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;"><p><b>سائق:</b> ${drv.title} ${drv.fullName} | ${ph} | ${drv.carType}</p><button class="btn btn-success" style="padding:4px; font-size:0.75rem;" onclick="db.ref('drivers/${ph}').update({approved:true}); logAdminAction('اعتماد السائق: ${drv.fullName}');">موافقة للمراسلة</button></div>`;
-                    } else {
-                        tableHtml += `<tr><td>${drv.title} ${drv.fullName}</td><td>${ph}</td><td>${drv.carType}</td><td><button class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteDriver('${ph}')">حذف</button></td></tr>`;
-                    }
-                });
-            }
-            tableHtml += '</table>';
-            if(listDiv) listDiv.innerHTML = pendingHtml || '<p style="color:#0369a1; font-size:0.85rem;">لا توجد طلبات سائقين معلقة.</p>';
-            if(tableDiv) tableDiv.innerHTML = tableHtml;
-        });
-
-        // تم إصلاح مشكلة كشف الزبائن وعرض الجدول بشكل سليم ومتكامل
-        db.ref('clients').on('value', (cSnap) => {
-            const listDiv = document.getElementById('adminPendingUsersList');
-            const clientsTableDiv = document.getElementById('adminClientsListTable');
-            let pendingHtml = '';
-            let clientsTableHtml = '<table class="data-table"><tr><th>الزبون</th><th>الهاتف</th><th>الجنس</th><th>الرحلات</th><th>الحالة</th><th>الإجراء</th></tr>';
-            let cData = cSnap.val();
-            
-            if(cData) {
-                Object.keys(cData).forEach(ph => {
-                    let usr = cData[ph];
-                    if(!usr.approved) {
-                        pendingHtml += `<div style="background:#fff; padding:8px; border-radius:6px; margin-bottom:6px; font-size:0.85rem;"><p><b>زبون:</b> ${usr.name} | ${ph}</p><button class="btn btn-success" style="padding:4px; font-size:0.75rem;" onclick="db.ref('clients/${ph}').update({approved:true}); logAdminAction('اعتماد الزبون: ${usr.name}');">موافقة</button></div>`;
-                    }
-                    if(usr.approved) {
-                        let remaining = 3 - (usr.tripsUsed || 0);
-                        let statusText = remaining <= 0 ? 'مقفل (يحتاج كرت)' : 'نشط';
-                        clientsTableHtml += `<tr><td>${usr.name}</td><td>${ph}</td><td>${usr.gender || 'ذكر'}</td><td>${usr.tripsUsed || 0} / 3</td><td>${statusText}</td><td><button class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteClient('${ph}')">حذف</button></td></tr>`;
-                    }
-                });
-            }
-            clientsTableHtml += '</table>';
-            if(listDiv) listDiv.innerHTML = pendingHtml || '<p style="color:#86198f; font-size:0.85rem;">لا توجد طلبات معلقة للزبائن.</p>';
-            if(clientsTableDiv) clientsTableDiv.innerHTML = clientsTableHtml;
         });
     </script>
 </body>
